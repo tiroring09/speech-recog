@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "speech-recog-proto"
+version = "0.1.0"
+description = ""
+authors = ["tiroring <tiroring@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+devv = "uvicorn src.app:app --reload"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+speechrecognition = "^3.10.1"
+pydub = "^0.25.1"
+pocketsphinx = "^5.0.3"
+numpy = "^1.26.4"
+soundfile = "^0.12.1"
+torch = "^2.2.1"
+openai-whisper = "^20231117"
+fastapi = "^0.110.0"
+python-multipart = "^0.0.9"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
