@@ -32,21 +32,25 @@ def speech_to_text(files: List[UploadFile] = File(...)):
 
 @app.post('/api/stt')
 def speech_to_text(file: UploadFile = File(...)):
-  print('/api/stt called: ', file.filename)
+  # print('/api/stt called: ', file.filename)
   # print(file.filename)
   # print(file.file)
 
   format = file.filename.split('.')[-1].lower()
 
   # 2) whisper제공 api 사용한 코드
-  # text = convert_whisper(file.file)
-
-  # 1) 최초 speech-recognition패키지사용한 코드
   if format == 'mp3':
     wav = convert_mp3_to_wav(file.file)
-    text = convert_audio_to_text(wav)
+    text = convert_whisper(wav)
   else:
-    text = convert_audio_to_text(file.file)
+    text = convert_whisper(file.file)
+
+  # 1) 최초 speech-recognition패키지사용한 코드
+  # if format == 'mp3':
+  #   wav = convert_mp3_to_wav(file.file)
+  #   text = convert_audio_to_text(wav)
+  # else:
+  #   text = convert_audio_to_text(file.file)
   
   # print(text)
   return { 'fileName': file.filename, 'text': text }
@@ -73,7 +77,7 @@ def convert_mp3_to_wav1(mp3_file_path):
   return wav_file_path
 
 def convert_audio_to_text(audio_file_path):
-  print('convert_audio_to_text called')
+  # print('convert_audio_to_text called')
   recognizer = sr.Recognizer()
   with sr.AudioFile(audio_file_path) as source:
     audio_data = recognizer.record(source)
@@ -100,7 +104,7 @@ def convert_audio_to_text(audio_file_path):
 import whisper
 
 def convert_whisper(audio_file):
-  print('convert_whisper called')
+  # print('convert_whisper called')
   model = whisper.load_model('base')
-  result = model.transcribe('example.wav')
+  result = model.transcribe(audio_file)
   return result['text']

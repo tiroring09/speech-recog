@@ -17,7 +17,8 @@
           :accept="allowedExtensions.map(x => `.${x}`).join(' ')"
           :disabled="isLoading">
         <p class="text-sm text-gray-500">
-          가능한 파일 확장자: {{ allowedExtensions.join(', ') }}
+          가능한 파일 확장자: {{ allowedExtensions.join(', ') }}<br/>
+          ※최초 <a href="https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages" target="_blank" class="link">학습모델</a> 다운로드를 위해 인터넷 연결이 필요합니다.
         </p>
       </div>
 
@@ -84,16 +85,19 @@ async function submitFile() {
   formData.append('file', selectedFile.value)
 
   isLoading.value = true
-  const { data } = await axios.post('/api/stt', formData)
-  
+  try {
+    const { data } = await axios.post('/api/stt', formData)
+    translatedText.value = data.text.replaceAll('.', '.\n')
+  } catch (error) {
+    console.log(error)
+    toast.error(`요청 처리 중 에러 발생. (개발자도구 콘솔확인)`)
+  }
+  isLoading.value = false
   // const { data } = await new Promise(res => 
   //   setTimeout(() => {
   //     res({data: {text: 'asdf'} })
   //   }, 1000)
   // )
-  
-  translatedText.value = data.text.replaceAll('.', '.\n')
-  isLoading.value = false
 }
 
 function copyToClipboard() {
