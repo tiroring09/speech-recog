@@ -39,18 +39,18 @@ def speech_to_text(file: UploadFile = File(...)):
   format = file.filename.split('.')[-1].lower()
 
   # 2) whisper제공 api 사용한 코드
-  if format == 'mp3':
-    wav = convert_mp3_to_wav(file.file)
-    text = convert_whisper(wav)
-  else:
-    text = convert_whisper(file.file)
-
-  # 1) 최초 speech-recognition패키지사용한 코드
   # if format == 'mp3':
   #   wav = convert_mp3_to_wav(file.file)
-  #   text = convert_audio_to_text(wav)
+  #   text = convert_whisper(wav)
   # else:
-  #   text = convert_audio_to_text(file.file)
+  #   text = convert_whisper(file.file)
+
+  # 1) 최초 speech-recognition패키지사용한 코드
+  if format == 'mp3':
+    wav = convert_mp3_to_wav(file.file)
+    text = convert_audio_to_text(wav)
+  else:
+    text = convert_audio_to_text(file.file)
   
   # print(text)
   return { 'fileName': file.filename, 'text': text }
